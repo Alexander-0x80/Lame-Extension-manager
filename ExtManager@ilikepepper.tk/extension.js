@@ -96,7 +96,7 @@ ManagerExtension.prototype = {
       }
       else { 
           extManager.enableExtension(this.userExtensions[extIndex]);
-         //global.log("enabled:" + this.userExtensions[extIndex]);
+          //global.log("enabled:" + this.userExtensions[extIndex]);
       }
           this.userExtensionsStatus[extIndex] = !extStatus;   
     }, 

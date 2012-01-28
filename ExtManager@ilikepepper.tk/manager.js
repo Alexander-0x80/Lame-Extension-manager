@@ -27,6 +27,7 @@ const Gio = imports.gi.Gio;
 const EXTENSIONS_SCHEMA          = "org.gnome.shell";
 const ENABLED_EXTENSIONS_KEY     = "enabled-extensions";
 const EXTENSIONS_PATH            = "/.local/share/gnome-shell/extensions";
+const SW_EXTENSIONS_PATH         = "/usr/share/gnome-shell/extensions"
 
 function ExtManager () {
     this._init();
@@ -44,10 +45,20 @@ ExtManager.prototype = {
         this.enabledExtensions = this.extVariant.get_strv();
 
         let extensionsPath = Gio.file_new_for_path(this.userHomeDir + EXTENSIONS_PATH);
-        let installedExtensions = extensionsPath.enumerate_children(Gio.FILE_ATTRIBUTE_STANDARD_NAME,Gio.FileQueryInfoFlags.NONE,null);
-        while((installedExtName = installedExtensions.next_file(null))) {
+        let installedUserExtensions = extensionsPath.enumerate_children(Gio.FILE_ATTRIBUTE_STANDARD_NAME,Gio.FileQueryInfoFlags.NONE,null);
+        let swExtensionsPath = Gio.file_new_for_path(SW_EXTENSIONS_PATH);
+        let installedSwExtensions = swExtensionsPath.enumerate_children(Gio.FILE_ATTRIBUTE_STANDARD_NAME,Gio.FileQueryInfoFlags.NONE,null);
+
+        // User Extensions
+        while((installedExtName = installedUserExtensions.next_file(null))) {
             let fileType = installedExtName.get_file_type();
             this.availableExtensions.push(installedExtName.get_name());
+        }
+
+        // System Wide Extensions
+        while((installedSwExtName = installedSwExtensions.next_file(null))) {
+            let fileType = installedSwExtName.get_file_type();
+            this.availableExtensions.push(installedSwExtName.get_name());
         }
     },
 
