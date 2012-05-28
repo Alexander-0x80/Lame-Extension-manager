@@ -25,9 +25,14 @@ const PopupMenu = imports.ui.popupMenu;
 const Panel = imports.ui.panel;
 const Main = imports.ui.main;
 const Lang = imports.lang;
+const Util = imports.misc.util;
+const GLib = imports.gi.GLib;
 
-const mgr = imports.ui.extensionSystem.extensions["ExtManager@ilikepepper.tk"];
-const extManager = new mgr.manager.ExtManager;
+const ExtensionUtils = imports.misc.extensionUtils;
+const mgr = ExtensionUtils.getCurrentExtension();
+
+const ext = mgr.imports.manager;
+const extManager = new ext.ExtManager;
 
 function ManagerExtension() {
    this._init();
@@ -44,14 +49,13 @@ ManagerExtension.prototype = {
 
         PanelMenu.SystemStatusButton.prototype._init.call(this, 'system-run');
         this._buildPopupMenu();
-        global.logError("loaded my extension");
 
     },
    
     enable: function() {
         this._buildExtensionsInfo();
         let _children = Main.panel._rightBox.get_children();
-        Main.panel._rightBox.insert_actor(this.actor, _children.length - 1);
+        Main.panel._rightBox.insert_child_at_index(this.actor,0);
         Main.panel._menus.addMenu(this.menu);
     },
 
@@ -67,7 +71,25 @@ ManagerExtension.prototype = {
 
        for each (extension in this.userExtensions) {
          this._buildMenuItem(extension,this.userExtensionsStatus[this.userExtensions.indexOf(extension)]);
-        }  
+        }
+        
+        
+        // Bottom buttons
+        this.menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
+        
+        // User extensions
+        let userExtensionsButton = new PopupMenu.PopupMenuItem(_("User extensions..."));
+        this.menu.addMenuItem(userExtensionsButton);
+        userExtensionsButton.connect('activate', function(){
+		Util.spawn(['nautilus', GLib.get_home_dir() + ext.EXTENSIONS_PATH]);
+	});
+        
+        // System-wide extensions
+        let swExtensionsButton = new PopupMenu.PopupMenuItem(_("System-wide extensions..."));
+        this.menu.addMenuItem(swExtensionsButton);
+        swExtensionsButton.connect('activate', function(){
+		Util.spawn(['nautilus', ext.SW_EXTENSIONS_PATH]);
+	});
     },
 
     _buildMenuItem: function(extName,init_val){

@@ -46,6 +46,7 @@ ExtManager.prototype = {
 
         let extensionsPath = Gio.file_new_for_path(this.userHomeDir + EXTENSIONS_PATH);
         let installedUserExtensions = extensionsPath.enumerate_children(Gio.FILE_ATTRIBUTE_STANDARD_NAME,Gio.FileQueryInfoFlags.NONE,null);
+        
         let swExtensionsPath = Gio.file_new_for_path(SW_EXTENSIONS_PATH);
         let installedSwExtensions = swExtensionsPath.enumerate_children(Gio.FILE_ATTRIBUTE_STANDARD_NAME,Gio.FileQueryInfoFlags.NONE,null);
 
