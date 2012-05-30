@@ -95,6 +95,7 @@ ManagerExtension.prototype = {
     _buildMenuItem: function(extName,init_val){
       let menuItem = new PopupMenu.PopupSwitchMenuItem(_(extName),init_val);
       this.menu.addMenuItem(menuItem);
+      menuItem.disconnect(menuItem._activateId);
       menuItem.connect('activate',Lang.bind(this,function () { this._extensionClick(this.userExtensions.indexOf(extName),
                                                                this.userExtensionsStatus[this.userExtensions.indexOf(extName)]); }));
     },
