@@ -1,8 +1,8 @@
 {
-        "shell-version": ["3.2.1"],
+        "shell-version": ["3.4"],
         "uuid": "ExtManager@ilikepepper.tk",
         "name": "Lame Extensions Manager",
         "description": "Simple extension to enable/disable installed extensions",
         "url": "https://github.com/Alexander-0x80/Lame-Extension-manager",
-        "author": "Alexander Ovchinnikov"
+        "author": "Alexander Ovchinnikov, Baptiste Saleil"
 }
